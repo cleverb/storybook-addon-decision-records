@@ -1,0 +1,133 @@
+{
+  "name": "storybook-addon-decision-records",
+  "version": "0.1.0",
+  "description": "Storybook addon that adds an ADR panel to browse architecture decision records with search and category filters.",
+  "keywords": [
+    "storybook-addon",
+    "storybook",
+    "adr",
+    "architecture-decision-records",
+    "decision-records"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cleverb/storybook-addon-decision-records.git"
+  },
+  "type": "module",
+  "author": "cleverb",
+  "license": "MIT",
+  "main": "./preset.js",
+  "exports": {
+    ".": "./preset.js",
+    "./preset": "./preset.js",
+    "./manager": "./manager.js",
+    "./regenerate-manifest": "./dist/regenerate-manifest.cjs",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist/**/*",
+    "README.md",
+    "manager.js",
+    "preset.js"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "build:storybook": "storybook build",
+    "build:watch": "npm run build -- --watch",
+    "clean": "rimraf ./dist ./storybook-static",
+    "format": "prettier --check .",
+    "format:fix": "prettier --write .",
+    "lint": "eslint --cache .",
+    "lint:fix": "npm run lint -- --fix",
+    "pack": "pnpm pack --out storybook-addon-decision-records-$(date +%s).tgz",
+    "prebuild": "npm run clean",
+    "prepare": "husky",
+    "prerelease": "zx scripts/prepublish-checks.js",
+    "release": "npm run build && semantic-release",
+    "release:canary": "npm run build && auto canary",
+    "start": "run-p build:watch \"storybook --quiet\"",
+    "storybook": "storybook dev -p 6006",
+    "test": "vitest --project unit",
+    "test:coverage": "vitest --project unit --coverage",
+    "test:storybook": "vitest --project storybook",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@chromatic-com/storybook": "^5.1.2",
+    "@commitlint/config-conventional": "^20.5.0",
+    "@eslint/js": "^9.39.4",
+    "@semantic-release/github": "^12.0.6",
+    "@semantic-release/npm": "^13.1.5",
+    "@storybook/addon-a11y": "^10.3.5",
+    "@storybook/addon-docs": "^10.3.5",
+    "@storybook/addon-vitest": "^10.3.5",
+    "@storybook/icons": "^2.0.1",
+    "@storybook/react-vite": "^10.3.5",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "@types/dompurify": "^3.2.0",
+    "@types/marked": "^6.0.0",
+    "@types/node": "^25.6.0",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.2.0",
+    "@vitest/browser": "^4.1.5",
+    "@vitest/browser-playwright": "^4.1.5",
+    "@vitest/coverage-istanbul": "^4.1.5",
+    "auto": "^11.3.6",
+    "boxen": "^8.0.1",
+    "chromatic": "^13.3.5",
+    "commitlint": "^20.5.2",
+    "dedent": "^1.7.2",
+    "eslint": "^9.39.4",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.5",
+    "eslint-plugin-react": "^7.37.5",
+    "globals": "^17.5.0",
+    "husky": "^9.1.7",
+    "jsdom": "^27.4.0",
+    "lint-staged": "^16.4.0",
+    "npm-run-all": "^4.1.5",
+    "playwright": "^1.59.1",
+    "prettier": "^3.8.3",
+    "prompts": "^2.4.2",
+    "react": "^19.2.5",
+    "react-dom": "^19.2.5",
+    "rimraf": "^6.1.3",
+    "semantic-release": "^25.0.3",
+    "storybook": "^10.3.5",
+    "tsup": "^8.5.1",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.59.1",
+    "vite": "^7.3.2",
+    "vitest": "^4.1.5",
+    "zx": "^8.8.5"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0 || ^19.0.0",
+    "react-dom": "^18.0.0 || ^19.0.0",
+    "storybook": "^10.0.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true,
+    "registry": "https://registry.npmjs.org/"
+  },
+  "packageManager": "pnpm@10.7.0",
+  "engines": {
+    "node": ">=20"
+  },
+  "storybook": {
+    "displayName": "Decision Records",
+    "supportedFrameworks": [
+      "react",
+      "vue3",
+      "web-components",
+      "preact"
+    ]
+  },
+  "dependencies": {
+    "dompurify": "^3.2.4",
+    "marked": "^15.0.7"
+  }
+}
