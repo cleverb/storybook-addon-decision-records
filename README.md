@@ -140,7 +140,7 @@ pnpm test:coverage
 
 Includes unit tests plus Storybook interaction test project via `@storybook/addon-vitest`.
 
-## Build and publish
+## Build and publish es
 
 ```bash
 pnpm build
