@@ -1,5 +1,11 @@
+.gitignore
+.eslintignore
+.prettierignore
+
+pnpm-lock.yaml
 dist/
 \*.tgz
+coverage/
 node_modules/
 storybook-static/
 build-storybook.log
@@ -7,8 +13,6 @@ build-storybook.log
 .env
 .idea
 .vscode
-.eslintcache
-coverage
-chromatic.log
-chromatic-build-*.xml
-chromatic-diagnostics.json
+
+README.md
+*.mdx
