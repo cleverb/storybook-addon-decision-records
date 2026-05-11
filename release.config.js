@@ -18,6 +18,13 @@ export default {
     ],
     '@semantic-release/release-notes-generator',
     '@semantic-release/github',
-    '@semantic-release/npm',
+    [
+      '@semantic-release/npm',
+      {
+        // Provenance requires OIDC (e.g. GitHub Actions with id-token: write).
+        // Do not set publishConfig.provenance — it breaks local and other non-OIDC publishes (e.g. auto canary).
+        npmPublishArgs: ['--provenance'],
+      },
+    ],
   ],
 }
