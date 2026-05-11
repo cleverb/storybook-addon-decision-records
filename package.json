@@ -44,7 +44,7 @@
     "prepare": "husky",
     "prerelease": "zx scripts/prepublish-checks.js",
     "release": "pnpm build && semantic-release",
-    "release:canary": "pnpm build && auto canary",
+    "release:canary": "pnpm build && npm_config_provenance=false auto canary",
     "start": "run-p build:watch \"storybook --quiet\"",
     "storybook": "storybook dev -p 6006",
     "test": "vitest --project unit",
@@ -110,7 +110,6 @@
   },
   "publishConfig": {
     "access": "public",
-    "provenance": true,
     "registry": "https://registry.npmjs.org/"
   },
   "packageManager": "pnpm@10.7.0",
