@@ -1,5 +1,5 @@
 {
-  "name": "@cleverb/storybook-addon-decision-records",
+  "name": "storybook-addon-decision-records",
   "version": "0.1.0",
   "description": "Storybook addon that adds an ADR panel to browse architecture decision records with search and category filters.",
   "keywords": [
