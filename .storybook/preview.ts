@@ -8,6 +8,9 @@ const preview: Preview = {
         date: /Date$/,
       },
     },
+    adr: {
+      disable: true,
+    },
     a11y: {
       test: 'todo',
     },

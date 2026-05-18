@@ -68,6 +68,8 @@ pnpm install -D storybook-addon-decision-records
 - Groups ADRs by category (subdirectory).
 - Supports frontmatter (`title`, `status`, `date`) and fallback title extraction from `# Heading`.
 - Lets tagged stories open directly on matching ADRs (`ADR-0001`, etc.).
+- Adds a `Tagged` filter chip so tagged stories can default to a low-noise ADR subset.
+- Optionally auto-hides the panel for stories without matching ADR tags.
 - Generates `public/sb-adr-data.json` automatically during Storybook runs.
 
 
@@ -89,6 +91,7 @@ const config: StorybookConfig = {
         indexReadmePath: './docs/decisions/README.md',
         tagMatchRegex: 'ADR-[0-9]+',
         panelLabel: 'Decision Records',
+        hidePanelWhenNotTagged: false,
       },
     },
   ],
@@ -96,6 +99,17 @@ const config: StorybookConfig = {
 
 export default config;
 ```
+
+To hide the ADR panel for specific stories/components, use Storybook parameters:
+
+```ts
+parameters: {
+  adr: { disable: true },
+}
+```
+
+When `hidePanelWhenNotTagged` is `true`, stories without a qualifying
+`tagMatchRegex` ADR tag are automatically treated as disabled for the ADR panel.
 
 ## ADR folder convention
 

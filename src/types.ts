@@ -22,6 +22,8 @@ export type AdrManifestMeta = {
   tagMatchRegex?: string
   /** Manager panel tab label (min 3 characters; otherwise "ADRs"). */
   panelLabel?: string
+  /** Auto-disable panel on stories without a qualifying ADR tag match. */
+  hidePanelWhenNotTagged?: boolean
 }
 
 export type AdrManifestPayload = {

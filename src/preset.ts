@@ -207,6 +207,10 @@ export async function viteFinal(
           : undefined,
       panelLabel:
         typeof merged.panelLabel === 'string' ? merged.panelLabel : undefined,
+      hidePanelWhenNotTagged:
+        typeof merged.hidePanelWhenNotTagged === 'boolean'
+          ? merged.hidePanelWhenNotTagged
+          : undefined,
     })
   }
 

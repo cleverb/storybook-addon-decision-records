@@ -17,3 +17,9 @@ Use `storybook-addon-decision-records` to index markdown ADR files and render th
 ## Consequences
 
 Decision visibility improves in design and implementation workflows.
+
+## Implementation History
+
+- 2026-05-17: Added a `Tagged` browse filter path for story-tagged ADRs and
+  introduced `hidePanelWhenNotTagged` (default `false`) so consumers can hide
+  the panel when no story tags resolve via `tagMatchRegex`.

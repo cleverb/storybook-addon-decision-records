@@ -49,6 +49,8 @@ export interface AdrContextStore {
   tab: RuleType
   handleCopyLink: (key: string) => void
   setTab: (type: RuleType) => void
+  setActive: (active: boolean) => void
+  active: boolean
   status: AdrUiStatus
   setStatus: (status: AdrUiStatus) => void
   error: unknown
@@ -75,6 +77,8 @@ export const AdrContext = createContext<AdrContextStore>({
   tab: RuleType.VIOLATION,
   handleCopyLink: () => {},
   setTab: () => {},
+  setActive: () => {},
+  active: false,
   setStatus: () => {},
   status: 'initial',
   error: undefined,
@@ -90,6 +94,7 @@ export const AdrContext = createContext<AdrContextStore>({
 })
 
 type AddonUiState = {
+  active: boolean
   ui: { highlighted: boolean; tab: RuleType }
   results: EnhancedResults | undefined
   error: unknown
@@ -102,6 +107,7 @@ export const AdrContextProvider: FC<
   const parameters = useParameter<AdrParameters>('adr', {})
 
   const [state, setState] = useAddonState<AddonUiState>(ADDON_ID, {
+    active: false,
     ui: {
       highlighted: false,
       tab: RuleType.VIOLATION,
@@ -111,7 +117,7 @@ export const AdrContextProvider: FC<
     status: 'initial',
   })
 
-  const { ui, results, error, status } = state
+  const { ui, results, error, active, status } = state
   const [selectedItems, setSelectedItems] = useState<Map<string, string>>(
     () => new Map(),
   )
@@ -178,6 +184,12 @@ export const AdrContextProvider: FC<
     void target
   }, [])
 
+  const setActive = useCallback(
+    (activeValue: boolean) =>
+      active !== activeValue && setState((prev) => ({ ...prev, active: activeValue })),
+    [setState, active],
+  )
+
   const setTab = useCallback(
     (type: RuleType) =>
       setState((prev) => ({ ...prev, ui: { ...prev.ui, tab: type } })),
@@ -200,6 +212,8 @@ export const AdrContextProvider: FC<
         toggleHighlight: handleToggleHighlight,
         tab: ui.tab,
         setTab,
+        setActive,
+        active: state.active,
         handleCopyLink,
         status,
         setStatus,

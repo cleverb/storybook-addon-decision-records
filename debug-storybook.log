@@ -1,0 +1,25 @@
+[12:10:03.405] [INFO] storybook v10.3.5
+[12:10:03.880] [DEBUG] Getting package.json info for /Users/oeist/Sites/storybook-addon-decision-records/package.json...
+[12:10:04.890] [DEBUG] Serving static files from [36mpublic[39m at [36m/[39m
+[12:10:04.890] [INFO] Starting...
+[12:10:05.032] [ERROR] [38;2;241;97;97mSB_CORE-SERVER_0004 (NoMatchingExportError): There was an exports mismatch error when trying to build Storybook.
+Please check whether the versions of your Storybook packages match whenever possible, as this might be the cause.
+
+Problematic example:
+{ "@storybook/react": "7.5.3", "@storybook/react-vite": "7.4.5", "storybook": "7.3.0" }
+
+Correct example:
+{ "@storybook/react": "7.5.3", "@storybook/react-vite": "7.5.3", "storybook": "7.5.3" }
+
+Please run `npx storybook doctor` for guidance on how to fix this issue.
+
+More info: 
+[39m
+    at buildOrThrow (file://./node_modules/.pnpm/storybook@10.3.5_@testing-library+dom@10.4.0_prettier@3.8.3_react-dom@19.2.5_react@19.2.5__react@19.2.5/node_modules/storybook/dist/core-server/index.js:4513:9)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async buildDevStandalone (file://./node_modules/.pnpm/storybook@10.3.5_@testing-library+dom@10.4.0_prettier@3.8.3_react-dom@19.2.5_react@19.2.5__react@19.2.5/node_modules/storybook/dist/core-server/index.js:8033:41)
+    at async withTelemetry (file://./node_modules/.pnpm/storybook@10.3.5_@testing-library+dom@10.4.0_prettier@3.8.3_react-dom@19.2.5_react@19.2.5__react@19.2.5/node_modules/storybook/dist/_node-chunks/chunk-FIR43JGQ.js:225:12)
+    at async dev (file://./node_modules/.pnpm/storybook@10.3.5_@testing-library+dom@10.4.0_prettier@3.8.3_react-dom@19.2.5_react@19.2.5__react@19.2.5/node_modules/storybook/dist/bin/core.js:2736:3)
+    at async _Command.<anonymous> (file://./node_modules/.pnpm/storybook@10.3.5_@testing-library+dom@10.4.0_prettier@3.8.3_react-dom@19.2.5_react@19.2.5__react@19.2.5/node_modules/storybook/dist/bin/core.js:2806:92)
+[12:10:05.038] [WARN] Broken build, fix the error above.
+You may need to refresh the browser.

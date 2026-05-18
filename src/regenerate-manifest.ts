@@ -4,7 +4,11 @@ import path from 'node:path'
 import { MANIFEST_FILENAME } from './constants'
 import { scanAdrs, toPosixPath } from './scan'
 import type { AdrManifestMeta, AdrManifestPayload } from './types'
-import { parsePanelLabel, parseTagMatchRegex } from './adrTagConfig'
+import {
+  parseHidePanelWhenNotTagged,
+  parsePanelLabel,
+  parseTagMatchRegex,
+} from './adrTagConfig'
 
 export function writeSbAdrData(
   appRoot: string,
@@ -41,6 +45,8 @@ export type RegenerateSbAdrDataOpts = {
   tagMatchRegex?: string | null
   /** Panel tab label (min 3 chars); default `ADRs`. */
   panelLabel?: string | null
+  /** Auto-disable panel on stories without qualifying ADR tags. */
+  hidePanelWhenNotTagged?: boolean | null
 }
 
 /** Scan ADRs and write `public/sb-adr-data.json` under `appRoot`. */
@@ -52,6 +58,7 @@ export function regenerateSbAdrData(opts: RegenerateSbAdrDataOpts): void {
     indexReadmePath,
     tagMatchRegex,
     panelLabel,
+    hidePanelWhenNotTagged,
   } = opts
 
   const repoRoot =
@@ -101,6 +108,9 @@ export function regenerateSbAdrData(opts: RegenerateSbAdrDataOpts): void {
   }
   meta.tagMatchRegex = parseTagMatchRegex(tagMatchRegex)
   meta.panelLabel = parsePanelLabel(panelLabel)
+  meta.hidePanelWhenNotTagged = parseHidePanelWhenNotTagged(
+    hidePanelWhenNotTagged,
+  )
 
   writeSbAdrData(appRoot, {
     entries,

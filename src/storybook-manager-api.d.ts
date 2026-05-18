@@ -12,6 +12,7 @@ declare module 'storybook/manager-api' {
     name?: string
     importPath?: string
     tags?: string[]
+    parameters?: Record<string, unknown>
   }
 
   export interface StorybookState {
@@ -22,6 +23,7 @@ declare module 'storybook/manager-api' {
   export interface API {
     getData(storyId: string, refId?: string): StoryIndexEntry | undefined
     getCurrentStoryData(): StoryIndexEntry | undefined
+    getUrlState(): { storyId?: string; refId?: string } | undefined
     openInEditor(location: {
       file: string
       line?: number

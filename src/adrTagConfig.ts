@@ -4,6 +4,7 @@ import type { AdrEntry } from './types'
 export const DEFAULT_TAG_MATCH_REGEX = 'ADR-[0-9]+'
 
 export const DEFAULT_PANEL_LABEL = 'ADRs'
+export const DEFAULT_HIDE_PANEL_WHEN_NOT_TAGGED = false
 
 export function parseTagMatchRegex(raw: unknown): string {
   if (typeof raw !== 'string' || !raw.trim()) return DEFAULT_TAG_MATCH_REGEX
@@ -24,6 +25,10 @@ export function parsePanelLabel(raw: unknown): string {
   const t = raw.trim()
   if (t.length < 3) return DEFAULT_PANEL_LABEL
   return t
+}
+
+export function parseHidePanelWhenNotTagged(raw: unknown): boolean {
+  return raw === true
 }
 
 export function findEntryMatchingAdrTag(

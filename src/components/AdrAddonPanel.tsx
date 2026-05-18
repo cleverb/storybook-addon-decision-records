@@ -4,6 +4,7 @@ import type { CSSProperties, MouseEvent } from 'react'
 import { Badge } from 'storybook/internal/components'
 import { styled, useTheme } from 'storybook/theming'
 import {
+  useParameter,
   useStorybookApi,
   useStorybookState,
   type API,
@@ -77,6 +78,16 @@ function storyTags(
   return raw.filter((x): x is string => typeof x === 'string')
 }
 
+function matchingTagsForStory(tags: string[], tagPattern: string): string[] {
+  let re: RegExp
+  try {
+    re = new RegExp(tagPattern)
+  } catch {
+    re = new RegExp(DEFAULT_TAG_MATCH_REGEX)
+  }
+  return tags.filter((t) => re.test(t))
+}
+
 function chipStyle(
   theme: {
     appBorderColor?: string
@@ -136,7 +147,7 @@ function AdrPanelContent({
   })
 
   const [q, setQ] = useState('')
-  const [cat, setCat] = useState<string | 'all'>('all')
+  const [cat, setCat] = useState<string | 'all' | 'tagged'>('all')
   const [selected, setSelected] = useState<AdrEntry | null>(null)
   const [tagPattern, setTagPattern] = useState(DEFAULT_TAG_MATCH_REGEX)
 
@@ -196,10 +207,32 @@ function AdrPanelContent({
     }
   }, [refreshToken, manualTick])
 
+  const activeTags = useMemo(
+    () => storyTags(api, sbState.storyId, sbState.refId),
+    [api, sbState.storyId, sbState.refId],
+  )
+
+  const taggedEntries = useMemo(() => {
+    const matchingTags = matchingTagsForStory(activeTags, tagPattern)
+    const hits: AdrEntry[] = []
+    const seen = new Set<string>()
+    // Storybook merges tags from multiple levels. Process from right-to-left so
+    // story-level overrides win over inherited/default tags.
+    for (const t of [...matchingTags].reverse()) {
+      const hit = findEntryMatchingAdrTag(entries, t)
+      if (!hit || seen.has(hit.id)) continue
+      seen.add(hit.id)
+      hits.push(hit)
+    }
+    return hits
+  }, [activeTags, entries, tagPattern])
+
   const filtered = useMemo(() => {
     const needle = q.trim().toLowerCase()
-    return entries.filter((row) => {
-      if (cat !== 'all' && row.category !== cat) return false
+    const source = cat === 'tagged' ? taggedEntries : entries
+    return source.filter((row) => {
+      if (cat !== 'all' && cat !== 'tagged' && row.category !== cat)
+        return false
       if (!needle) return true
       return (
         row.title.toLowerCase().includes(needle) ||
@@ -207,7 +240,7 @@ function AdrPanelContent({
         row.category.toLowerCase().includes(needle)
       )
     })
-  }, [q, cat, entries])
+  }, [q, cat, entries, taggedEntries])
 
   useEffect(() => {
     if (selected && !filtered.find((r) => r.id === selected.id))
@@ -220,24 +253,18 @@ function AdrPanelContent({
     const routingKey = `${storyKey}|${tagPattern}`
     const list = entriesRef.current
     const tags = storyTags(api, sbState.storyId, sbState.refId)
-    let re: RegExp
-    try {
-      re = new RegExp(tagPattern)
-    } catch {
-      re = new RegExp(DEFAULT_TAG_MATCH_REGEX)
-    }
-
-    const anyTagMatchesPattern = tags.some((t) => re.test(t))
+    const matchingTags = matchingTagsForStory(tags, tagPattern)
+    const anyTagMatchesPattern = matchingTags.length > 0
     if (anyTagMatchesPattern && list.length === 0) {
       return
     }
 
-    for (const t of tags) {
-      if (!re.test(t)) continue
+    // Reverse to prefer story-level tags over inherited defaults.
+    for (const t of [...matchingTags].reverse()) {
       const hit = findEntryMatchingAdrTag(list, t)
       if (hit) {
         setQ('')
-        setCat('all')
+        setCat('tagged')
         setSelected(hit)
         setTab(RuleType.PASS)
         lastStoryKeyDefaultedRef.current = routingKey
@@ -250,6 +277,7 @@ function AdrPanelContent({
     }
     lastStoryKeyDefaultedRef.current = routingKey
     setTab(RuleType.VIOLATION)
+    setCat('all')
     setSelected(null)
   }, [
     loading,
@@ -485,6 +513,18 @@ function AdrPanelContent({
                   >
                     All
                   </button>
+                  {taggedEntries.length > 0 ? (
+                    <button
+                      type="button"
+                      onClick={(ev) => {
+                        absorbButton(ev)
+                        setCat('tagged')
+                      }}
+                      style={chipStyle(theme, cat === 'tagged')}
+                    >
+                      Tagged
+                    </button>
+                  ) : null}
                   {catList.map((c) => (
                     <button
                       key={c}
@@ -598,6 +638,7 @@ function AdrPanelContent({
     q,
     cat,
     catList,
+    taggedEntries,
     filtered,
     selected,
     manifestMeta,
@@ -616,7 +657,15 @@ function AdrPanelContent({
   )
 }
 
-export function AdrPanel() {
+export function AdrAddonPanel({ active }: { active: boolean }) {
+  // Grab the specific parameters passed to the active story
+  const params = useParameter('adr', {})
+  console.log('params::', params)
+  console.log('active::', active)
+  // useGlobals().setParameter('adr', { disable: active ? false : true });
+  // useGlobals({ ['adr']: false });
+  // addons.getChannel().emit?.(FORCE_RE_RENDER);
+
   const api = useStorybookApi()
   const state = useStorybookState()
   const canOpenInEditor =

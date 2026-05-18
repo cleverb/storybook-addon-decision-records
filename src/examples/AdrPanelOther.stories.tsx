@@ -11,14 +11,9 @@ function Placeholder() {
 }
 
 const meta: Meta<typeof Placeholder> = {
-  title: 'Examples/ADR Panel',
+  title: 'Examples/ADR Panel Other',
   component: Placeholder,
-  parameters: {
-    adr: {
-      disable: false,
-    },
-  },
-  tags: ['ADR-0001'],
+  tags: [],
 }
 
 export default meta
@@ -27,5 +22,5 @@ type Story = StoryObj<typeof meta>
 export const Default: Story = {}
 
 export const UsesDifferentAdr: Story = {
-  tags: ['ADR-0002'],
+  tags: [],
 }

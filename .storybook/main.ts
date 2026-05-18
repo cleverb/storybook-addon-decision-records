@@ -21,6 +21,7 @@ const config: StorybookConfig = {
         categories: ['frontend', 'tooling'],
         indexReadmePath: './docs/decisions/README.md',
         panelLabel: 'Decision Records',
+        // Experimental: Use with caution and globally disable in preview for stories that don't have an ADR tag.
         hidePanelWhenNotTagged: true,
         /** Regex (source only) against story tags; first matching tag that maps to an ADR wins. Default ADR-[0-9]+ */
         // tagMatchRegex: String.raw`ADR-\d{4}`,
