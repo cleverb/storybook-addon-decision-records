@@ -22,7 +22,7 @@ jobs:
           mkdir ../storybook-11-check
           tar --exclude=.git --exclude=node_modules --exclude=storybook-static -cf - . | tar -xf - -C ../storybook-11-check
           cd ../storybook-11-check
-          node -e "const fs = require('node:fs'); const p = JSON.parse(fs.readFileSync('package.json', 'utf8')); for (const name of Object.keys(p.devDependencies)) if (name === 'storybook' || name.startsWith('@storybook/')) p.devDependencies[name] = 'next'; fs.writeFileSync('package.json', JSON.stringify(p, null, 2) + '\\n')"
+          node -e "const fs = require('node:fs'); const p = JSON.parse(fs.readFileSync('package.json', 'utf8')); for (const name of ['@storybook/addon-a11y', '@storybook/addon-docs', '@storybook/addon-vitest', '@storybook/react-vite', 'storybook']) p.devDependencies[name] = 'next'; fs.writeFileSync('package.json', JSON.stringify(p, null, 2) + '\\n')"
       - name: Install Storybook 11 prerelease dependencies
         working-directory: ../storybook-11-check
         run: pnpm install --no-frozen-lockfile
