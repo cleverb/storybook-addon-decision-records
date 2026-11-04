@@ -1,0 +1,30 @@
+name: Storybook 11 compatibility
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  storybook-11:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+      - name: Use Node.js 22.12
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.12
+          cache: pnpm
+      - name: Install Storybook 11 prerelease dependencies
+        run: pnpm install --no-frozen-lockfile
+      - name: Typecheck
+        run: pnpm typecheck
+      - name: Unit tests
+        run: pnpm test
+      - name: Build addon
+        run: pnpm build
+      - name: Build Storybook
+        run: pnpm build:storybook
