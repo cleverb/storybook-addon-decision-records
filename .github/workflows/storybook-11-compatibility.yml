@@ -17,24 +17,14 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22.12
-      - name: Prepare isolated Storybook 11 workspace
-        run: |
-          mkdir ../storybook-11-check
-          tar --exclude=.git --exclude=node_modules --exclude=storybook-static -cf - . | tar -xf - -C ../storybook-11-check
-          cd ../storybook-11-check
-          node -e "const fs = require('node:fs'); const p = JSON.parse(fs.readFileSync('package.json', 'utf8')); for (const name of ['@storybook/addon-a11y', '@storybook/addon-docs', '@storybook/addon-vitest', '@storybook/react-vite', 'storybook']) p.devDependencies[name] = 'next'; delete p.devDependencies['@chromatic-com/storybook']; fs.writeFileSync('package.json', JSON.stringify(p, null, 2) + '\\n'); const main = fs.readFileSync('.storybook/main.ts', 'utf8').replace(/\\s*'@chromatic-com\\/storybook',?\\n/, '\\n'); fs.writeFileSync('.storybook/main.ts', main)"
+          cache: pnpm
       - name: Install Storybook 11 prerelease dependencies
-        working-directory: ../storybook-11-check
         run: pnpm install --no-frozen-lockfile
       - name: Typecheck
-        working-directory: ../storybook-11-check
         run: pnpm typecheck
       - name: Unit tests
-        working-directory: ../storybook-11-check
         run: pnpm test
       - name: Build addon
-        working-directory: ../storybook-11-check
         run: pnpm build
       - name: Build Storybook
-        working-directory: ../storybook-11-check
         run: pnpm build:storybook
